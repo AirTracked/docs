@@ -1,4 +1,4 @@
-AirTrack cocumentation
+AirTrack documentation
 ===================================
 
 **AirTrack** is a web application designed to reduce the administrative 
