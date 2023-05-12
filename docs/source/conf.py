@@ -2,9 +2,9 @@
 
 # -- Project information
 
-project = 'Lumache'
-copyright = '2021, Graziella'
-author = 'Graziella'
+project = 'AirTrack'
+copyright = '2023, Felix Slama'
+author = 'Felix Slama'
 
 release = '0.1'
 version = '0.1.0'
