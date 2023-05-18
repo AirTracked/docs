@@ -1,6 +1,22 @@
 Webapp
 =======
 
+Infrastructure
+--------------
+
+The webapp is based on a `Node.js <https://nodejs.org/en/>`_ server. The server is responsible for the communication with the database and the communication with the clients. The server is also responsible for the authentication and authorization of the users.
+
+It is hosted inside Elastic Beanstalk on AWS.
+
+
+.. image:: images/ElasticBeanstalk-Flowchart.png
+    :width: 500
+    :alt: Topology of the webapp infrastructure on AWS
+
+
+It will be extended in the future with two availability zones and a Elastic Load Balancer (ELB) for load balancing and high availability.
+
+
 Mapview
 --------
 
@@ -35,7 +51,23 @@ Mapbox vs. Google Maps Platform
 This comparison is based on what we need for AirTrack. Based on this we decided to use Mapbox.
 
 
+.. csv-table:: Mapbox vs. Google Maps Platform
 
+    Features, Mapbox, Google Maps Platform
+    JavaScript SDK free loads per month, 50.000, 28.500
+    JavaScript SDK $ per 1000 loads per month, $5 (50.001-100.000 loads per month) $4 (100.001-200.000 loads per month) $3(200.001-1.000.000 loads per month), $7
+    Geocoding API free requests per month, 100.000, 28.500
+    Route Optimization API free requests per month, Unlimited (because of public beta), No API
+    API & SDK requests billed separately, Yes, No
+    Detailed documentation, Yes, Yes
+    Support, Only in paid version, Only in paid version
+    Custom map styles, Yes, Yes
+    Offline maps, Yes, No
+    Possibility for self-hosting, Yes (Mapbox Atlas), No
+    Street view, No, Yes
+    Easy implementation of dynamic map changes, Yes, No
+    Turf.js integration, Yes, No
+    **Open Source**, **Yes**, No
 
 +------------------------------------------------+----------------------------------------+----------------------+
 | Features                                       | Mapbox                                 | Google Maps Platform |
