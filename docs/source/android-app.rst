@@ -26,6 +26,71 @@ List of assigned sites
 
 .. TODO: Paul's Part
 
+**Concept**
+
+It should be bulit an android app which show the sites for every pilot.
+The data is transferred via the api, which is then processed further in android
+The api accesses the mongdb. This data is then output. If one press on a location one will redirect to  another screen with a more detailed overview
+
+
+.. image:: images/Android-sites-chart.jpg
+
+
+
+The data comes from the Mongodb database. This data is retrieved via an API. To get the data from the api we use retrofit. It allows the data to be preserved. Once received the data will be displayed.
+
+
+**What is retrofit**
+
+Retrofit is a type-safe HTTP client used to retrieve, update, and delete the data from web services. 
+
+
+One just need to provide the URL and then one can get the data from the API. 
+
+For example our api-url is
+
+   private const val BASE_URL = "https://98j8m82ij0.execute-api.eu-central-1.amazonaws.com/production/"
+
+
+If we now want to retrieve data we only use the retrofit get function to get the data
+
+   @GET("record_by_so_nr/{id}")
+
+Then the Data can be used.
+
+   suspend fun getItemById(@Path("id") select: Int): List<JsonEntry>
+
+**The output**
+
+The first Screen is the sites Screen. This screen shows the sites that are assigned to the person.
+Every person can see the address and other important informations from their assigned sites.
+
+For example 
+
+.. image:: images/android-sites.jpg
+
+
+
+If one press the surface it will take the user to another screen that shows more detailed information.
+
+For example
+
+
+.. image:: images/android-sites-1.jpg
+
+The list is much longer that this
+
+**How it works**
+
+
+Put simply, the data is received from the API via retrofit. This data is then processed in the viewmodel. Since 
+the number of pages varies from user to user, everything has to work dynamically. For this reason we use a lazy column that fills the data into the screen. Pressing the screen takes you to the the nexts screen. 
+The ID of the site is given so that it can be queried again with the api. The data is then displayed, this time detailed
+
+
+
+
+
 Upload flightlogs
 ^^^^^^^^^^^^^^^^^
 
