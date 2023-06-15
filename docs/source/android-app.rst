@@ -45,7 +45,6 @@ The data comes from the Mongodb database. This data is retrieved via an API. To 
 
 Retrofit is a type-safe HTTP client used to retrieve, update, and delete the data from web services. 
 
-<<<<<<< HEAD
 The advantages
 
 -- Simple and intuitive API: Retrofit provides a clean and straightforward API for defining and executing HTTP requests
@@ -59,8 +58,6 @@ Retrofit is the only thing that is very flexible and also fast compared to the o
 
 
 **Example**
-=======
->>>>>>> 709b7767ae87480d065c8f2cfa4338fa2d78abd0
 
 One just need to provide the URL and then one can get the data from the API. 
 
@@ -71,20 +68,21 @@ For example our api-url is
 
 If we now want to retrieve data we only use the retrofit get function to get the data
 
+.. code-block::
+
    @GET("record_by_so_nr/{id}")
 
 Then the Data can be used.
 
+.. code-block::
+
    suspend fun getItemById(@Path("id") select: Int): List<JsonEntry>
 
-<<<<<<< HEAD
 
 The ID is transferred to the function, in the sites screen, with a state file and then further processed via the view model. This retrieves the data via the api.
 The the data is shown.
 
 
-=======
->>>>>>> 709b7767ae87480d065c8f2cfa4338fa2d78abd0
 **The output**
 
 The first Screen is the sites Screen. This screen shows the sites that are assigned to the person.
