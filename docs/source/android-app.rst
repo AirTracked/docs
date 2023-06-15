@@ -45,6 +45,19 @@ The data comes from the Mongodb database. This data is retrieved via an API. To 
 
 Retrofit is a type-safe HTTP client used to retrieve, update, and delete the data from web services. 
 
+The advantages
+
+-- Simple and intuitive API: Retrofit provides a clean and straightforward API for defining and executing HTTP requests
+-- Support for multiple protocols: It can work with different HTTP protocols
+-- Easy to work with 
+
+
+**Why retrofit**
+
+Retrofit is the only thing that is very flexible and also fast compared to the others. It offers many functions that are very easy to use. Many also consider it the preferred solution
+
+
+**Example**
 
 One just need to provide the URL and then one can get the data from the API. 
 
@@ -60,6 +73,11 @@ If we now want to retrieve data we only use the retrofit get function to get the
 Then the Data can be used.
 
    suspend fun getItemById(@Path("id") select: Int): List<JsonEntry>
+
+
+The ID is transferred to the function, in the sites screen, with a state file and then further processed via the view model. This retrieves the data via the api.
+The the data is shown.
+
 
 **The output**
 
@@ -83,13 +101,10 @@ The list is much longer that this
 
 **How it works**
 
-
 Put simply, the data is received from the API via retrofit. This data is then processed in the viewmodel. Since 
 the number of pages varies from user to user, everything has to work dynamically. For this reason we use a lazy column that fills the data into the screen. Pressing the screen takes you to the the nexts screen. 
 The ID of the site is given so that it can be queried again with the api. The data is then displayed, this time detailed
-
-
-
+The Id comes from the State File, which stores the id if the user click on the screen.
 
 
 Upload flightlogs
