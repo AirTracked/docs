@@ -74,13 +74,10 @@ Read data from Excel
 
    df = pandas.read_excel("data.xlsx")
 
-<<<<<<< HEAD
 Select Database
-=======
 .. code-block:: bash
    
     print("tes")
->>>>>>> 60dece69c0b1f7896e23d26aae6c1ed771365bf0
 
    db = database["databasename"]
 
