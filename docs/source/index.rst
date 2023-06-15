@@ -1,8 +1,9 @@
 AirTrack documentation
 ===================================
 
-**AirTrack** is a web application designed to reduce the administrative 
-ressources needed to coordinate asset inspections
+**AirTrack** is not a single application, but rather a whole ecosystem.
+
+It is a set of tools that is designed to reduce the administrative resources needed to coordinate asset inspections.    
 
 Contents
 --------
@@ -13,3 +14,4 @@ Contents
    api
    webapp
    android-app
+   mongodb

@@ -11,6 +11,8 @@
 
 .vscode
 
+source/docs.code-workspace
+
 # IPython
 profile_default/
 ipython_config.py
