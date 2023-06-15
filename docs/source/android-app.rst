@@ -7,6 +7,7 @@ Overview
 This is the AirTrack Companion App for Android. It is written in Kotlin and uses the Android SDK. It is designed to run on Android 11 (API level 30) and above.
 
 .. image:: images/Android-Flowchart.jpg
+    :width: 400
     :alt: Flowchart of the workflow in the Android app
 
 The App uses a basic AWS Cognito login to authenticate the user. The user can then see the list of their assigned sites and can also upload flightlogs from the connected DJI Controller to the AWS S3 bucket.
@@ -110,6 +111,7 @@ Workflow
 ''''''''
 
 .. image:: images/Screenshot_AirTrack_Companion_upload_flightlogs.jpg
+    :width: 400
     :alt: Screenshot of the upload flightlogs screen
 
 At first the user needs to set the permissions. This is done by clicking on the button "Request Permission". In a future release this will be handled during the onboarding process.
@@ -136,6 +138,8 @@ The Worker
 The worker is a background process that is triggered (in this case) by the user. It is designed to run in the background for a long time. "A long time" in the Android world means that the process can run longer than 10 minutes. This is called a "long worker".
 
 In older versions of the app this upload process was handed in a coroutine that caused the app to freeze while the upload was running. Due to the size of the the flightlogs the coroutine ran into a timeout and the upload failed. The worker solves this problem by running the upload process in the background.
+
+See also the Android Developer documentation on `Persistent Work <https://developer.android.com/guide/background/persistent>`_ and `Asynchronous Work <https://developer.android.com/guide/background/asynchronous>`_.
 
 
 
