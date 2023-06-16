@@ -3,7 +3,7 @@
 # -- Project information
 
 project = 'AirTrack'
-copyright = '2023, Felix Slama, Maximilian Birnbachwer, Lukas Anzelak, Paul Pessenbacher'
+copyright = '2023, Felix Slama, Maximilian Birnbacher, Lukas Anzelak, Paul Pessenbacher'
 author = 'Felix Slama, Maximilian Birnbachwer, Lukas Anzelak, Paul Pessenbacher'
 
 release = '0.1'
