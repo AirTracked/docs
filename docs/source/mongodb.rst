@@ -2,18 +2,21 @@
 ===========
 
 **What is Mongodb**
+--------------------
 
 MongoDB is a document-oriented NoSQL database used for storing, 
 querying, and managing data. MongoDB is conceptually different 
 from traditional relational databases. 
 
 **The advantages from MongoDB**
+--------------------------------
 
 - MongoDB stores data in flexible JSON-like documents. 
 - It works well with modern applications.
 - In addtion it is flexible, scalable and therefore usable for numerous tasks.
 
 **Why we use MongoDB**
+------------------------
 
 We use MongoDB because we need/use the main advantages of scalability and flexibility.
 Compared to a MySQL database, we can insert new data more easily. For example if we relanize later
@@ -49,8 +52,8 @@ the unique id help to find the other information.
 .. image:: images/mongod.jpg
 
 
-Why we need a database
------------------------
+**Why we need a database**
+--------------------------
 
 The The data that we will later use in Android and in the Node-JS app comes from an Excel file.
 This Excel file contains 40000 entries, all of which must be stored in the database. Since there is no 
@@ -104,7 +107,7 @@ to see what sites are are map to their.
 A user and the so_nr of the function are specified. Then the ID is searched for the SO_nr, which is then used to match it to the pilot. Once assigned, on can search for the pilot and retrieve all IDs
 assigned to the pilots. With this ids one can determine the sites.
 
-.. image:: images/sites.jpg
+.. image:: images/Sites.jpg
 
 
 **The most important code**
