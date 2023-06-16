@@ -521,7 +521,7 @@ To create a new user you have to fill out the form. Most notably the role assign
 
 
 Assigning sites
-^^^^^^^^^^^^^^^
+'''''''''''''''
 
 .. image:: images/Screenshot_AssignSitesToUser.png
     :width: 500
@@ -530,9 +530,9 @@ Assigning sites
 To assign sites to a user you have to select the user in the dropdown and then select the sites you want to assign to the user. You can select multiple sites at once. After you have selected the sites you can click on the "Apply" button to assign the sites to the user.
 
 Show all users
-^^^^^^^^^^^^^^
+''''''''''''''
 
-.. image:: image/Screenshot_UserList.png
+.. image:: images/Screenshot_UserList.png
     :width: 500
     :alt: Screenshot of the Show All Users form
 
