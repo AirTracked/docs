@@ -35,6 +35,260 @@ With the help of Bootstrap we can create a responsive design that works on every
     :width: 500
     :alt: Screenshot of the webapp
 
+
+User Login
+-----------
+
+The user login is implemented via the Amazon Cloud Service 'AWS Cognito'. Amazon Cognito is an authentication and authorization cloud service commonly used to store user information. With this service, it is simple to **add**, **sign up**, **sign in**, or **authorize users**.
+It securely stores user data and handles authentication through multiple social identity providers, supporting multi-factor authentication.
+Additionally, there are multiple SDKs available to use AWS Cognito as a federated identity management service, allowing the handling of all traffic over the AWS API or Cloud Console.
+
+
+AWS Cognito
+^^^^^^^^^^^
+
+Why Cognito
+'''''''''''
+
+We primarily chose the Amazon Cloud Service, specifically AWS, as our preferred provider over others like Microsoft Azure. One of the key factors influencing this decision was the existing balance we had in our AWS account. Utilizing the funds already available in our account made AWS an attractive and cost-effective option for us.
+Another compelling reason for selecting AWS was the remarkably low usage cost associated with AWS Cognito service. This played a significant role in our decision-making process, especially considering our relatively smaller user base. With fewer active users to manage, the cost savings offered by AWS Cognito made it a financially advantageous choice for us.
+
+Furthermore, AWS Cognito, as part of the wider AWS ecosystem, seamlessly integrates with other AWS services, providing a cohesive and comprehensive solution for our cloud infrastructure needs. The ease of integration and the ability to leverage additional AWS services further solidified our decision to opt for AWS as our cloud service provider of choice.
+
+
+Federated Identity
+''''''''''''''''''
+
+To integrate AWS Cognito into our Node.js app, we utilize it as a Federated Identity Management System primarily by accessing the service through the AWS API. This approach enables users to log in to each of our services using the same set of credentials.
+It also offers the added advantage of relieving us from concerns about securely storing user data or the risk of data loss in case of server faults.
+
+**Benefits**
+
+- Makes it easy for users by using a simplified login process.
+- Provides stronger security using trusted identity providers.
+- Centralizes identity management for easier administration.
+- Ensures scalability and reliability through AWS infrastructure.
+- Boosts developer productivity with ready-to-use features and SDKs.
+
+Cognito integration
+'''''''''''''''''''
+
+**User Pools**
+
+Cognito User Pools store the user data required for authentication. Each User Pool provides functions like adding, deleting, and granting access to users. Additionally, every User Pool has a unique identifier and an App Client. The App Client is mostly used for integrating the User Pool into a self-hosted website and using Cognito as a Federated Identity solution.
+
+*Here is an example of what a User Pool looks like:*
+
+.. image:: images/cognito_user_pool_example.png
+
+
+**NodeJS Integration**
+
+The following code snippet was used to integrate our AWS Cognito Pool:
+
+.. code-block:: python
+
+    require('dotenv').config({path: __dirname + '../.env'});
+    const AWS = require('aws-sdk');
+    const AwsCognito = require('amazon-cognito-identity-js');
+    AWS.config.update({ 
+      region: process.env.AWS_COGNITO_REGION,
+      accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+      secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
+    });
+    const PoolData = {
+      UserPoolId: process.env.AWS_COGNITO_USER_POOL_ID,
+      ClientId: process.env.AWS_COGNITO_CLIENT_ID
+    };
+    const CISP = new AWS.CognitoIdentityServiceProvider();
+    const AWSPool = new AwsCognito.CognitoUserPool(PoolData);
+
+*Note that this code makes use of the dotenv extension, which reads the required parameters needed for the configuration from a file called '.env'.
+We do this mainly to ensure that no secrets are stored in the source code and to enhance security when working with GitHub.*
+
+
+After implementing that code on top of our configuration file, we can now utilize AWS SDK Cognito functions, including this one:
+
+.. code-block:: python
+
+    function getCognitoUser(email) {
+      const userData = { Username: email, Pool: AWSPool };
+      return new AwsCognito.CognitoUser(userData);
+    }
+
+*This function looks for cognito users in the linked User Pool and return an CognitoUser Object*
+
+NodeJS Session
+^^^^^^^^^^^^^^
+
+What is the NodeJS Session Module
+'''''''''''''''''''''''''''''''''
+
+The NodeJS module 'express-session' is a middleware that provides session management functionality for applications built with the Express framework.
+It allows to create and manage sessions, which are temporary storage areas associated with each client's web browser interacting with the application.
+
+
+**Functionality**
+
+- Session Initialization: The module is used to initialize sessions in an Express application by configuring various options. These options include the secret key for signing the session ID, session storage mechanism, cookie settings, and more.
+- Session Data Storage: The module provides a storage mechanism for session data. By default, session data is stored in memory, but it can be configured to use other storage options like a database or external cache.
+- Session Management: With 'express-session,' managing sessions throughout a client's interaction with the application is effortless. It allows setting, retrieving, and deleting session data as needed.
+
+
+Implementation
+''''''''''''''
+
+We implement the Express Session in our NodeJS application using the following code snippet:
+
+.. code-block:: python
+
+    const app = express();
+    app.use(session({
+      secret: process.env.SESSION_SECRET,
+      resave: true,
+      saveUninitialized: true
+    }));
+
+After initializing the Express Session, it becomes possible to store data for each user individually. For example, this is achieveable by using code like the following:
+
+.. code-block:: python
+
+    app.get('/', async (req, res) => {
+      req.session.email = "myuser.example@gmail.com"
+      req.session.username = "myUser"
+      req.session.save()
+    });
+
+The code above utilizes a function that stores user-specific data by saving the username and email in the individual user's session when they visit the root page of the Express app (the landing page when accessing the server via a browser).
+This means that whenever the variable 'req.session.username' is accessed and printed for the user, it will always contain the user-specific data, and no other data generated by a different user's session. 
+
+
+Cognito User Attributes
+'''''''''''''''''''''''
+
+Every Cognito user has specific attributes that can be defined when creating a Cognito User Pool.
+However, there is also the possibility to define custom attributes. For example, our WebApp utilizes the custom attributes 'display_name' and 'group', which are defined as follows:
+
+.. image:: images/user_attributes.png
+
+
+
+Using sessions with Cognito
+'''''''''''''''''''''''''''
+
+Now, the function of storing data in Express Sessions is utilized to log in users with Cognito and save additional data of the Cognito users in the user-specific Express Session.
+This is accomplished using a function like the following:
+
+.. code-block:: python
+
+    app.post('/login', async (req, res) => {
+      let rawSessionData = await cfg.login(req.body.username, req.body.password)
+      try {
+        if (rawSessionData.statusCode == 400 && rawSessionData.data.code == 'UserNotConfirmedException') {
+          req.session.verificationEmail = req.body.username
+          req.session.save()
+          res.redirect('/verify');
+        }
+        else {
+          req.session.AwsCredentials = rawSessionData.credentials
+          let mySession = await cfg.getUserSession(req.session.AwsCredentials)
+          req.session.userData = await cfg.getUser(mySession)
+          req.session.userName = req.session.userData.userInformation.UserAttributes[3].Value
+          req.session.userGroup = req.session.userData.userInformation.UserAttributes[2].Value
+          req.session.save()
+          res.redirect('/')
+        }
+      } catch {
+        res.send(rawSessionData.data.message)
+      }
+    });
+
+*In this function, if the user has already verified their email, the Express Session saves their AWS credentials, as well as the custom attributes (as seen in the screenshot above) such as the username and user group (user group represents their access rights).*
+
+
+
+User Authorization
+^^^^^^^^^^^^^^^^^^
+
+User Login
+''''''''''
+
+In our WebApp, not every random internet user is granted access to all web pages. First and foremost, every user must be logged in to gain access.
+We ensure this by implementing middleware that is executed before allowing any user to make an reqeust to an webpage:
+
+.. code-block:: python
+
+    const isAuthenticated = (req, res, next) => {
+      if (req.session.userName) {
+        next();
+      } else {
+        res.redirect('/login')
+      }
+    };
+
+*This code snippet checks if a username is stored in the user-specific Express Session. 
+As mentioned in the previous code snippet, this variable is set after logging in. Therefore, if the username is not set, the user cannot be logged in and will not be granted access to any webpage.*
+
+
+This middleware function, which ensures that a user is logged in, is implemented as follows:
+
+.. code-block:: python
+
+    app.get('/', isAuthenticated, (req, res) => {
+      res.render('home.ejs', {user: req.session.userName});
+    });
+
+
+Admin Login
+'''''''''''
+
+In our WebApp, there are specific features intended for use by admins only, such as the Admin Dashboard. We protect these resources by utilizing the custom attribute 'group.'
+Similar to how we check if a user is logged in, the following code snippet checks if the userGroup variable (which is set after login) is equal to 'Admin' before granting access to a webpage. (The userGroup variable can only have two possibilities: 'User' or 'Admin'):
+
+.. code-block:: python
+
+    const isAdmin = (req, res, next) => {
+      if (req.session.userGroup == 'Admin') {
+        next();
+      } else {
+        res.status(401).send('Only Administrators are authorized to view this content');
+      }
+    };
+
+    app.get('/admin-dashboard', isAuthenticated, isAdmin, (req, res) => {
+      res.render('admin.ejs', {user: req.session.userName})
+    });
+
+*Here the middleware function 'isAdmin,' which verifies if a user is an admin, is implemented in the same way as the middleware function that verifies user login.*
+
+Security Aspects
+^^^^^^^^^^^^^^^^
+
+Cognito
+'''''''
+
+- **Usernames:** All users stored in the Cognito User Pool are required to log in using a verified email address. We have chosen this approach to avoid the need for mechanisms to check duplicate usernames while ensuring unique names for each user.
+
+- **Verification:** After a new user is created, they must enter a verification code before being able to log in and access the web app's webpages.
+
+- **Password Complexity:** Every Cognito User Pool can specify a specific password policy to enhance security. Our chosen policy requires passwords to be 16 characters long and include at least one number, special character, uppercase letter, and lowercase letter.
+
+
+WebApp
+''''''
+
+To enhance the user experience, we have specified error codes that are displayed to the user, providing them with a better understanding of what went wrong.
+
+- **200** - OK: The operation completed successfully.
+- **400** - UserAuth Error: The user is unable to log in.
+- **405** - GetUser Error: Unable to fetch user data from Cognito.
+- **410** - UserCreate Error: Unable to send data to Cognito while creating a user.
+- **415** - UserVerify Error: Unable to send data to Cognito while sending a verification code.
+- **420** - UserDeletion Error: Unable to send data to Cognito while deleting a user.
+- **425** - Fetch Sites Error: Unable to fetch user data from Cognito.
+- **403** - Forbidden: The user does not have the rights to access a resource.
+
+
 Mapview
 --------
 
@@ -267,7 +521,7 @@ To create a new user you have to fill out the form. Most notably the role assign
 
 
 Assigning sites
-^^^^^^^^^^^^^^^
+'''''''''''''''
 
 .. image:: images/Screenshot_AssignSitesToUser.png
     :width: 500
@@ -276,9 +530,9 @@ Assigning sites
 To assign sites to a user you have to select the user in the dropdown and then select the sites you want to assign to the user. You can select multiple sites at once. After you have selected the sites you can click on the "Apply" button to assign the sites to the user.
 
 Show all users
-^^^^^^^^^^^^^^
+''''''''''''''
 
-.. image:: image/Screenshot_UserList.png
+.. image:: images/Screenshot_UserList.png
     :width: 500
     :alt: Screenshot of the Show All Users form
 
