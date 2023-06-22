@@ -62,6 +62,7 @@ simplest language to reach our goal. This script should read the data from exel 
 
 
 **The Concept**
+----------------
 
 - The script connects to the database
 - The data is read from exel.
