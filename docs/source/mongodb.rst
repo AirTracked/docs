@@ -1,5 +1,5 @@
 **MongoDB**
--------------
+===========
 
 **What is Mongodb**
 
@@ -14,6 +14,7 @@ from traditional relational databases.
 - In addtion it is flexible, scalable and therefore usable for numerous tasks.
 
 **Why we use MongoDB**
+-----------------------
 
 We use MongoDB because we need/use the main advantages of scalability and flexibility.
 Compared to a MySQL database, we can insert new data more easily. For example if we relanize later
@@ -49,8 +50,8 @@ the unique id help to find the other information.
 .. image:: images/mongod.jpg
 
 
-Why we need a database
------------------------
+**Why we need a database**
+---------------------------
 
 The The data that we will later use in Android and in the Node-JS app comes from an Excel file.
 This Excel file contains 40000 entries, all of which must be stored in the database. Since there is no 
@@ -59,6 +60,7 @@ simplest language to reach our goal. This script should read the data from exel 
 
 
 **The Concept**
+----------------
 
 - The script connects to the database
 - The data is read from exel.
@@ -93,7 +95,7 @@ And wirte the data to Database
 
 
 **Other Script**
-================
+-----------------
 
 Another task was tocreate a base script for the API that maps the data to the pilots. The IDs are assigned to the pilots. The pilot can then use this ID
 to see what sites are are map to their. 
